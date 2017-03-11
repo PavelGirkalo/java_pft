@@ -5,11 +5,11 @@ public class MyFirstProgram {
     hello("world");
     hello("Pavel");
 
-    Square s = new Square(5);
-    System.out.println("Площадь квадрата со стороной " + s.l + " = " + s.area());
+    Square s = new Square(7);
+    System.out.println("Square of a square with side " + s.l + " = " + s.area());
 
     Rectangle r = new Rectangle(5, 10);
-    System.out.println("Площадь прямоугольника со сторонами " + r.a + " и " + r.b + " = " + r.area());
+    System.out.println("Square of a rectangle with sides " + r.a + " and " + r.b + " = " + r.area());
 
   }
 
