@@ -16,9 +16,14 @@ public class MyFirstProgram {
     //Вычисление расстояния между точками с помощью функции distance()
     Point p1 = new Point(2.5, 3.5);
     Point p2 = new Point(5.5, -0.5);
+    System.out.println("");
     System.out.println("Calculate distance using function");
     System.out.println("Distance between p1(" + p1.a + ";" + p1.b + ") and p2(" + p2.a + ";" + p2.b + ") = " + distance(p1, p2));
 
+    //Вычисление расстояния между точками с помощью метода distance() класса Point
+    System.out.println("");
+    System.out.println("Calculate distance using method of class Point");
+    System.out.println("Distance between p1(" + p1.a + ";" + p1.b + ") and p2(" + p2.a + ";" + p2.b + ") = " + p1.distance(p2));
   }
 
   public static void hello(String string) {
