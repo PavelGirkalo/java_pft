@@ -71,9 +71,9 @@ public class ContactHelper extends HelperBase {
     click(By.xpath("//div[@id='content']/form/input[@name='update']"));
   }
 
-  public void create(ContactData contactData, boolean b) {
+  public void create(ContactData contact, boolean b) {
     initContactCreation();
-    fillContactForm(new ContactData("First", "Middle", "Last", "Nickname", "Title", "Company", "Address", "+79010000001", "test@gmail.com", "homepage.com", "3", "2", "1950", "test1"), true);
+    fillContactForm(contact, true);
     submitContactCreation();
   }
 
@@ -100,7 +100,12 @@ public class ContactHelper extends HelperBase {
       String lastName = element.findElement(By.xpath("td[2]")).getText();
       String firstName = element.findElement(By.xpath("td[3]")).getText();
       int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
-      ContactData contact = new ContactData(id, firstName, "Middle", lastName,"Nickname", "Title", "Company", "Address", "+79010000001", "test@gmail.com", "homepage.com", "3", "2", "1950", "test1");
+      ContactData contact = new ContactData()
+              .withId(id)
+              .withFirstname(firstName).withMiddlename("Middle").withLastname(lastName)
+              .withNickname("Nickname").withTitle("Title").withCompany("Company").withAddress("Address")
+              .withMobile("+79010000001").withEmail("test@gmail.com").withHomepage("homepage.com")
+              .withBday("3").withBmonth("2").withBirthyear("1950").withGroup("test1");
       contacts.add(contact);
     }
     return contacts;
