@@ -8,7 +8,9 @@ import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ContactHelper extends HelperBase {
 
@@ -61,10 +63,15 @@ public class ContactHelper extends HelperBase {
     wd.findElements(By.name("selected[]")).get(index).click();
   }
 
-  public void initContactModification(int index) {
+  public void selectContactById(int id) {
+    wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
+  }
+
+  public void initContactModification(int id) {
     // В коллекции нумерация элементов с 0, на странице нумерация элементов с 1 + один доп. tr на странице - это описание заголовков таблицы,
     // поэтому индекс кнопки для редактирования соотв. контакта = (index + 2)
-    click(By.xpath("//table[@id='maintable']/tbody/tr[" + (index+2) + "]/td[8]/a/img"));
+    //click(By.xpath("//table[@id='maintable']/tbody/tr[@value='" + id + "']/td[8]/a/img"));
+    wd.findElement(By.cssSelector("a[href='edit.php?id=" + id + "']")).click();
   }
 
   public void submitContactModification() {
@@ -77,15 +84,20 @@ public class ContactHelper extends HelperBase {
     submitContactCreation();
   }
 
-  public void modify(int index, ContactData contact) {
-    selectContact(index);
-    initContactModification(index);
+  public void modify(ContactData contact) {
+    selectContactById(contact.getId());
+    initContactModification(contact.getId());
     fillContactForm(contact, false);
     submitContactModification();
   }
 
   public void delete(int index) {
     selectContact(index);
+    deleteSelectedContacts();
+  }
+
+  public void delete(ContactData contact) {
+    selectContactById(contact.getId());
     deleteSelectedContacts();
   }
 
@@ -110,4 +122,23 @@ public class ContactHelper extends HelperBase {
     }
     return contacts;
   }
+
+  public Set<ContactData> all() {
+    Set<ContactData> contacts = new HashSet<ContactData>();
+    List<WebElement> elements = wd.findElements(By.xpath("//table[@id='maintable']/tbody/tr[@name='entry']"));
+    for (WebElement element : elements) {
+      String lastName = element.findElement(By.xpath("td[2]")).getText();
+      String firstName = element.findElement(By.xpath("td[3]")).getText();
+      int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
+      ContactData contact = new ContactData()
+              .withId(id)
+              .withFirstname(firstName).withMiddlename("Middle").withLastname(lastName)
+              .withNickname("Nickname").withTitle("Title").withCompany("Company").withAddress("Address")
+              .withMobile("+79010000001").withEmail("test@gmail.com").withHomepage("homepage.com")
+              .withBday("3").withBmonth("2").withBirthyear("1950").withGroup("test1");
+      contacts.add(contact);
+    }
+    return contacts;
+  }
+
 }
