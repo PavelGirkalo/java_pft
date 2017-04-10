@@ -1,13 +1,8 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,16 +10,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ContactCreationTests extends TestBase {
 
 
-  @Test(enabled = true)
+  @Test
   public void testContactCreation() {
     app.goTo().homepage();
     Contacts before = app.contact().all();
     ContactData contact = new ContactData()
-            .withFirstname("First").withMiddlename("Middle").withLastname("Last")
-            .withNickname("Nickname").withTitle("Title").withCompany("Company").withAddress("Address")
-            .withMobile("+79010000001").withEmail("test@gmail.com").withHomepage("homepage.com")
-            .withBday("3").withBmonth("2").withBirthyear("1950").withGroup("test1");
-    app.contact().create(contact, true);
+            .withFirstname("First").withLastname("Last")
+            .withHome("111-111").withMobile("+79010000001").withWork("666 666")
+            .withAddress("Address")
+            .withEmail("email@gmail.com").withEmail2("email2@gmail.com").withEmail3("email3@gmail.com");
+    app.contact().create(contact);
     app.goTo().homepage();
     Contacts after = app.contact().all();
 
