@@ -30,9 +30,9 @@ public class ContactModificationTests extends TestBase {
     ContactData modifiedContact = before.iterator().next();
     ContactData contact = new ContactData()
             .withId(modifiedContact.getId())
-            .withFirstname("First").withMiddlename("Middle").withLastname("Last")
-            .withNickname("Nickname").withTitle("Title").withCompany("Company").withAddress("Address")
-            .withMobile("+79010000001").withEmail("test@gmail.com").withHomepage("homepage.com")
+            .withFirstname("First").withLastname("Last")
+            .withAddress("Address")
+            .withMobile("+79010000001").withEmail("mail@gmail.com").withHomepage("homepage.com")
             .withBday("3").withBmonth("2").withBirthyear("1950");
     app.contact().modify(contact);
     app.goTo().homepage();
