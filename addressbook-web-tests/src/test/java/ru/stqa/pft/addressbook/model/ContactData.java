@@ -24,6 +24,7 @@ public class ContactData {
   private String birthyear;
   private String address2;
   private String group;
+  private String allDetails;
 
 
   public int getId() {
@@ -112,6 +113,10 @@ public class ContactData {
 
   public String getGroup() {
     return group;
+  }
+
+  public String getAllDetails() {
+    return allDetails;
   }
 
   public ContactData withId(int id) {
@@ -221,6 +226,11 @@ public class ContactData {
 
   public ContactData withGroup(String group) {
     this.group = group;
+    return this;
+  }
+
+  public ContactData withAllDetails(String allDetails) {
+    this.allDetails = allDetails;
     return this;
   }
 
