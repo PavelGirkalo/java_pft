@@ -29,24 +29,46 @@ public class ContactOtherTests extends TestBase {
   public void testContactPhones() {
     app.goTo().homepage();
     ContactData contact = app.contact().all().iterator().next();
-    ContactData contactInfoFromEdirForm = app.contact().infoFromEditForm(contact);
-    assertThat(contact.getAllPhones(), equalTo(mergePhones(contactInfoFromEdirForm)));
+    ContactData contactInfoFromEditForm = app.contact().infoFromEditForm(contact);
+    ContactData contactInfoFromDetailForm = app.contact().infoFromDetailForm(contact);
+    String phones = contactInfoFromDetailForm.getAllDetails();
+    assertThat(contact.getAllPhones(), equalTo(mergePhones(contactInfoFromEditForm)));
   }
 
   @Test
   public void testContactAddress() {
     app.goTo().homepage();
     ContactData contact = app.contact().all().iterator().next();
-    ContactData contactInfoFromEdirForm = app.contact().infoFromEditForm(contact);
-    assertThat(contact.getAddress(), equalTo(contactInfoFromEdirForm.getAddress()));
+    ContactData contactInfoFromEditForm = app.contact().infoFromEditForm(contact);
+    assertThat(contact.getAddress(), equalTo(contactInfoFromEditForm.getAddress()));
   }
 
   @Test
   public void testContactEmail() {
     app.goTo().homepage();
     ContactData contact = app.contact().all().iterator().next();
-    ContactData contactInfoFromEdirForm = app.contact().infoFromEditForm(contact);
-    assertThat(contact.getAllEmail(), equalTo(mergeEmails(contactInfoFromEdirForm)));
+    ContactData contactInfoFromEditForm = app.contact().infoFromEditForm(contact);
+    assertThat(contact.getAllEmail(), equalTo(mergeEmails(contactInfoFromEditForm)));
+  }
+
+  @Test
+  public void testContactDetailsForm() {
+    app.goTo().homepage();
+    ContactData contact = app.contact().all().iterator().next();
+    ContactData editForm = app.contact().infoFromEditForm(contact);
+    String details = app.contact().infoFromDetailForm(contact).getAllDetails();
+    assertThat(cleaned(details), equalTo(mergeAllDetails(editForm)));
+  }
+
+  private String mergeAllDetails(ContactData contact) {
+     String a = Arrays.asList(contact.getFirstname(), contact.getLastname(), contact.getAddress(),
+            contact.getHome(), contact.getMobile(), contact.getWork(),
+            contact.getEmail(), contact.getEmail2(), contact.getEmail3())
+            .stream()
+            .filter((s) -> ! s.equals(""))
+            .map(ContactOtherTests::cleaned)
+            .collect(Collectors.joining(""));
+    return a;
   }
 
   private String mergeEmails(ContactData contact) {
@@ -63,8 +85,8 @@ public class ContactOtherTests extends TestBase {
             .collect(Collectors.joining("\n"));
   }
 
-  public static String cleaned(String phone) {
-    return phone.replaceAll("\\s","").replaceAll("-()","");
+  public static String cleaned(String string) {
+    return string.replaceAll("M:", "").replaceAll("H:", "").replaceAll("W:", "").replaceAll("\\s","").replaceAll("-()","");
   }
 
 }
