@@ -90,9 +90,9 @@ public class ContactHelper extends HelperBase {
       int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
       String firstName = element.findElement(By.xpath("td[3]")).getText();
       String lastName = element.findElement(By.xpath("td[2]")).getText();
-      String allPhones = element.findElement(By.xpath("//table[@id='maintable']/tbody/tr[@name='entry']/td[6]")).getText();
-      String address = element.findElement(By.xpath("//table[@id='maintable']/tbody/tr[@name='entry']/td[4]")).getText();
-      String allEmail = element.findElement(By.xpath("//table[@id='maintable']/tbody/tr[@name='entry']/td[5]")).getText();
+      String allPhones = element.findElement(By.xpath("td[6]")).getText();
+      String address = element.findElement(By.xpath("td[4]")).getText();
+      String allEmail = element.findElement(By.xpath("td[5]")).getText();
 
       ContactData contact = new ContactData()
               .withId(id)
@@ -126,5 +126,19 @@ public class ContactHelper extends HelperBase {
 
   private void initContactModificationById(int id) {
     wd.findElement(By.cssSelector(String.format("a[href='edit.php?id=%s']", id))).click();
+  }
+
+  public ContactData infoFromDetailForm(ContactData contact) {
+    initContactDetailsById(contact.getId());
+    String allDetails = wd.findElement(By.xpath("//div[@id='content']")).getText();
+
+    wd.navigate().back();
+    return new ContactData().withId(contact.getId())
+            .withAllDetails(allDetails);
+
+  }
+
+  private void initContactDetailsById(int id) {
+    wd.findElement(By.cssSelector(String.format("a[href='view.php?id=%s']", id))).click();
   }
 }
