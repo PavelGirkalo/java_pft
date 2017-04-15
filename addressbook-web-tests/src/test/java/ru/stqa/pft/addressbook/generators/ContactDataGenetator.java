@@ -17,10 +17,10 @@ import java.util.List;
 
 public class ContactDataGenetator {
 
-  @Parameter(names = "-cc", description = "Contact count")
+  @Parameter(names = "-c", description = "Contact count")
   public int count;
 
-  @Parameter(names = "-cf", description = "Target contact file")
+  @Parameter(names = "-f", description = "Target contact file")
   public String file;
 
   @Parameter(names = "-d", description = "Data format")
