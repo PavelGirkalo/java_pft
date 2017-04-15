@@ -1,5 +1,6 @@
 package ru.stqa.pft.addressbook.tests;
 
+import com.thoughtworks.xstream.XStream;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,7 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ContactCreationTests extends TestBase {
 
   @DataProvider
-  public Iterator<Object[]> validContacts() throws IOException {
+  public Iterator<Object[]> validContactsCsv() throws IOException {
     List<Object[]> list = new ArrayList<Object[]>();
     BufferedReader reader = new BufferedReader (new FileReader(new File("src/test/resources/contacts.csv")));
     String line = reader.readLine();
@@ -28,11 +30,26 @@ public class ContactCreationTests extends TestBase {
       list.add(new Object[] {new ContactData().withFirstname(split[0]).withLastname(split[1]).withAddress(split[2]).withEmail(split[3]).withMobile(split[4])});
       line = reader.readLine();
     }
-
     return list.iterator();
   }
 
-  @Test(dataProvider = "validContacts")
+  @DataProvider
+  public Iterator<Object[]> validContactsXml() throws IOException {
+    BufferedReader reader = new BufferedReader (new FileReader(new File("src/test/resources/contacts.xml")));
+    String xml = "";
+    String line = reader.readLine();
+    while (line != null) {
+      xml += line;
+      line = reader.readLine();
+    }
+    XStream xstream = new XStream();
+    xstream.processAnnotations(ContactData.class);
+    List<ContactData> groups = (List<ContactData>) xstream.fromXML(xml);
+    return groups.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
+  }
+
+
+  @Test(dataProvider = "validContactsXml")
   public void testContactCreation(ContactData contact) {
     app.goTo().homepage();
     Contacts before = app.contact().all();
