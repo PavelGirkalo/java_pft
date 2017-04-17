@@ -13,8 +13,4 @@ gradle-app.setting
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
 .idea/workspace.xml
-*.csv
-*.json
-addressbook-web-tests/src/test/resources/contacts.xml
-addressbook-web-tests/src/test/resources/groups.xml
 *.log
