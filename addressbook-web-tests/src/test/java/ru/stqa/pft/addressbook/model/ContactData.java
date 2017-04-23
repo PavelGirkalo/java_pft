@@ -3,52 +3,109 @@ package ru.stqa.pft.addressbook.model;
 import com.google.gson.annotations.Expose;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.io.File;
 
 @XStreamAlias("contact")
+@Entity
+@Table (name = "addressbook")
 public class ContactData {
 
   @XStreamOmitField
+  @Id
+  @Column (name = "id")
   private int id = Integer.MAX_VALUE;
+
   @Expose
+  @Column (name = "firstname")
   private String firstname;
+
+  @Expose
+  @Column (name = "middlename")
   private String middlename;
+
   @Expose
+  @Column (name = "lastname")
   private String lastname;
+
+  @Column (name = "nickname")
+  @Transient
   private String nickname;
+
+  @Column (name = "title")
+  @Transient
   private String title;
+
+  @Column (name = "company")
+  @Transient
   private String company;
+
   @Expose
+  @Column (name = "address")
+  @Type(type = "text")
   private String address;
+
+  @Column (name = "home")
+  @Type(type = "text")
+  @Transient
   private String home;
+
   @Expose
+  @Column (name = "mobile")
+  @Type(type = "text")
   private String mobile;
+
+  @Column (name = "work")
+  @Type(type = "text")
+  @Transient
   private String work;
+
+  @Transient
   private String allPhones;
+
   @Expose
+  @Column (name = "email")
+  @Type(type = "text")
   private String email;
+
+  @Column (name = "email2")
+  @Type(type = "text")
+  @Transient
   private String email2;
+
+  @Column (name = "email3")
+  @Type(type = "text")
+  @Transient
   private String email3;
+
+  @Transient
   private String allEmail;
+
+  @Transient
   private String homepage;
+
+  @Transient
   private String bday;
+
+  @Transient
   private String bmonth;
+
+  @Transient
   private String birthyear;
+
+  @Transient
   private String address2;
+
+  @Transient
   private String group;
+
+  @Transient
   private String allDetails;
 
-  public File getPhoto() {
-    return photo;
-  }
-
-  public ContactData withPhoto(File photo) {
-    this.photo = photo;
-    return this;
-  }
-
-  private File photo;
+  @Transient
+  private String photo;
 
 
   public int getId() {
@@ -65,6 +122,10 @@ public class ContactData {
 
   public String getLastname() {
     return lastname;
+  }
+
+  public File getPhoto() {
+    return new File(photo);
   }
 
   public String getNickname() {
@@ -160,6 +221,11 @@ public class ContactData {
 
   public ContactData withLastname(String lastname) {
     this.lastname = lastname;
+    return this;
+  }
+
+  public ContactData withPhoto(File photo) {
+    this.photo = photo.getPath();
     return this;
   }
 
@@ -261,8 +327,13 @@ public class ContactData {
   @Override
   public String toString() {
     return "ContactData{" +
-            "firstname='" + firstname + '\'' +
+            "id=" + id +
+            ", firstname='" + firstname + '\'' +
+            ", middlename='" + middlename + '\'' +
             ", lastname='" + lastname + '\'' +
+            ", address='" + address + '\'' +
+            ", mobile='" + mobile + '\'' +
+            ", email='" + email + '\'' +
             '}';
   }
 
@@ -275,16 +346,22 @@ public class ContactData {
 
     if (id != that.id) return false;
     if (firstname != null ? !firstname.equals(that.firstname) : that.firstname != null) return false;
-    return lastname != null ? lastname.equals(that.lastname) : that.lastname == null;
+    if (middlename != null ? !middlename.equals(that.middlename) : that.middlename != null) return false;
+    if (lastname != null ? !lastname.equals(that.lastname) : that.lastname != null) return false;
+    if (address != null ? !address.equals(that.address) : that.address != null) return false;
+    if (mobile != null ? !mobile.equals(that.mobile) : that.mobile != null) return false;
+    return email != null ? email.equals(that.email) : that.email == null;
   }
 
   @Override
   public int hashCode() {
     int result = id;
     result = 31 * result + (firstname != null ? firstname.hashCode() : 0);
+    result = 31 * result + (middlename != null ? middlename.hashCode() : 0);
     result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
+    result = 31 * result + (address != null ? address.hashCode() : 0);
+    result = 31 * result + (mobile != null ? mobile.hashCode() : 0);
+    result = 31 * result + (email != null ? email.hashCode() : 0);
     return result;
   }
-
-
 }
