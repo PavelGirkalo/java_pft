@@ -17,7 +17,7 @@ public class ContactOtherTests extends TestBase {
     app.goTo().homepage();
     if (app.contact().all().size() == 0) {
       app.contact().create(new ContactData()
-                      .withFirstname("First").withLastname("Last")
+                      .withFirstname("First").withLastname("Middle").withLastname("Last")
                       .withHome("111-111").withMobile("+79010000001").withWork("666 666")
                       .withAddress("Address")
                       .withEmail("mail@gmail.com").withEmail2("mail2@gmail.com").withEmail3("mail3@gmail.com"));
@@ -31,7 +31,6 @@ public class ContactOtherTests extends TestBase {
     ContactData contact = app.contact().all().iterator().next();
     ContactData contactInfoFromEditForm = app.contact().infoFromEditForm(contact);
     ContactData contactInfoFromDetailForm = app.contact().infoFromDetailForm(contact);
-    String phones = contactInfoFromDetailForm.getAllDetails();
     assertThat(contact.getAllPhones(), equalTo(mergePhones(contactInfoFromEditForm)));
   }
 
@@ -54,14 +53,14 @@ public class ContactOtherTests extends TestBase {
   @Test
   public void testContactDetailsForm() {
     app.goTo().homepage();
-    ContactData contact = app.contact().all().iterator().next();
+    ContactData contact = app.db().contacts().iterator().next();
     ContactData editForm = app.contact().infoFromEditForm(contact);
     String details = app.contact().infoFromDetailForm(contact).getAllDetails();
     assertThat(cleaned(details), equalTo(mergeAllDetails(editForm)));
   }
 
   private String mergeAllDetails(ContactData contact) {
-     String a = Arrays.asList(contact.getFirstname(), contact.getLastname(), contact.getAddress(),
+     String a = Arrays.asList(contact.getFirstname(), contact.getMiddlename(), contact.getLastname(), contact.getAddress(),
             contact.getHome(), contact.getMobile(), contact.getWork(),
             contact.getEmail(), contact.getEmail2(), contact.getEmail3())
             .stream()
