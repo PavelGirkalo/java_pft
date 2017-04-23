@@ -19,10 +19,11 @@ public class ContactModificationTests extends TestBase {
     if (app.db().contacts().size() == 0) {
       File photo = new File("src/test/resources/st.jpg");
       app.contact().create(new ContactData()
-                      .withFirstname("First").withMiddlename("Middle").withLastname("Last")
-                      .withAddress("Address")
-                      .withMobile("+79010000001").withEmail("mail@gmail.com")
-                      .withPhoto(photo));
+              .withFirstname("First").withMiddlename("Middle").withLastname("Last")
+              .withMobile("+79010000001")
+              .withAddress("Address")
+              .withEmail("mail@gmail.com")
+              .withPhoto(photo));
       app.goTo().homepage();
     }
   }
