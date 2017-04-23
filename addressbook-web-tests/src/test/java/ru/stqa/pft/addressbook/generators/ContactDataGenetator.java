@@ -27,6 +27,7 @@ public class ContactDataGenetator {
   public String format;
 
   public static void main(String[] args) throws IOException {
+    System.out.println(new File(".").getAbsolutePath());
     ContactDataGenetator genetator = new ContactDataGenetator();
     JCommander jCommander = new JCommander(genetator);
     try {
@@ -74,7 +75,7 @@ public class ContactDataGenetator {
     System.out.println(new File(".").getAbsolutePath());
     Writer writer = new FileWriter(file);
     for (ContactData contact : contacts) {
-      writer.write(String.format("%s;%s;%s;%s;%s\n", contact.getFirstname(), contact.getLastname(), contact.getAddress(), contact.getEmail(), contact.getMobile()));
+      writer.write(String.format("%s;%s;%s;%s;%s\n", contact.getFirstname(), contact.getMiddlename(), contact.getLastname(), contact.getAddress(), contact.getEmail(), contact.getMobile()));
     }
     writer.close();
 
@@ -83,8 +84,9 @@ public class ContactDataGenetator {
   private List<ContactData> generateContacts(int count) {
     List<ContactData> contacts = new ArrayList<ContactData>();
     for (int i = 0; i <count; i++) {
-      contacts.add(new ContactData().withFirstname((String.format("First %s", i)))
-              .withLastname(String.format("Last %s", i)).withAddress(String.format("Address %s", i))
+      contacts.add(new ContactData()
+              .withFirstname((String.format("First %s", i))).withMiddlename(String.format("Middle %s", i)).withLastname(String.format("Last %s", i))
+              .withAddress(String.format("Address %s", i))
               .withEmail(String.format("Email%s@test.com", i)).withMobile(String.format("+7901000%s", i)));
     }
     return contacts;
