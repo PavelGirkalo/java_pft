@@ -1,6 +1,5 @@
 package ru.stqa.pft.addressbook.appmanager;
 
-import org.apache.xerces.impl.dv.DVFactoryException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -41,6 +40,15 @@ public class DbHelper {
     session.getTransaction().commit();
     session.close();
     return new Contacts(result);
+  }
+
+  public ContactData contactWithId(int id) {
+    Session session = sessionFactory.openSession();
+    session.beginTransaction();
+    List<ContactData> result = session.createQuery("from ContactData where deprecated = '0000-00-00' and id=" + id).list();
+    session.getTransaction().commit();
+    session.close();
+    return result.iterator().next();
   }
 
 
