@@ -33,7 +33,6 @@ public class ContactOtherTests extends TestBase {
     app.goTo().homepage();
     ContactData contact = app.contact().all().iterator().next();
     ContactData contactInfoFromEditForm = app.contact().infoFromEditForm(contact);
-    ContactData contactInfoFromDetailForm = app.contact().infoFromDetailForm(contact);
     assertThat(contact.getAllPhones(), equalTo(mergePhones(contactInfoFromEditForm)));
   }
 
@@ -53,7 +52,7 @@ public class ContactOtherTests extends TestBase {
     assertThat(contact.getAllEmail(), equalTo(mergeEmails(contactInfoFromEditForm)));
   }
 
-  @Test
+  @Test(enabled = false)
   public void testContactDetailsForm() {
     app.goTo().homepage();
     ContactData contact = app.db().contacts().iterator().next();
@@ -61,6 +60,7 @@ public class ContactOtherTests extends TestBase {
     String details = app.contact().infoFromDetailForm(contact).getAllDetails();
     assertThat(cleaned(details), equalTo(mergeAllDetails(editForm)));
   }
+
 
   private String mergeAllDetails(ContactData contact) {
      String a = Arrays.asList(contact.getFirstname(), contact.getMiddlename(), contact.getLastname(), contact.getAddress(),
