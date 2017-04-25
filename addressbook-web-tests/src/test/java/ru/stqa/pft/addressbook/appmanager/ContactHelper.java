@@ -3,6 +3,7 @@ package ru.stqa.pft.addressbook.appmanager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 
@@ -39,6 +40,10 @@ public class ContactHelper extends HelperBase {
   public void deleteSelectedContacts() {
     click(By.xpath("//div[@id='content']/form[@name='MainForm']/div[2]/input"));
     wd.switchTo().alert().accept();
+  }
+
+  public void addToGroup() {
+    wd.findElement(By.cssSelector("input[name='add']")).click();
   }
 
   public void selectContact(int index) {
@@ -143,5 +148,18 @@ public class ContactHelper extends HelperBase {
 
   private void initContactDetailsById(int id) {
     wd.findElement(By.cssSelector(String.format("a[href='view.php?id=%s']", id))).click();
+  }
+
+  public void selectGroupForAdding(String group) {
+    new Select(wd.findElement(By.name("to_group"))).selectByVisibleText(group);
+  }
+
+  public void selectCurrentGroup(String group) {
+    new Select(wd.findElement(By.name("group"))).selectByVisibleText(group);
+  }
+
+
+  public void removeFromGroup() {
+    wd.findElement(By.cssSelector("input[name=remove]")).click();
   }
 }
