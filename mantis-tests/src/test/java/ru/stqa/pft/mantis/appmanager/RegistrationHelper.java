@@ -2,7 +2,7 @@ package ru.stqa.pft.mantis.appmanager;
 
 
 import org.openqa.selenium.By;
-import ru.stqa.pft.mantis.model.User;
+import ru.stqa.pft.mantis.model.UserData;
 
 public class RegistrationHelper extends HelperBase {
 
@@ -33,7 +33,7 @@ public class RegistrationHelper extends HelperBase {
 
   }
 
-  public User resetPassword() {
+  public UserData resetPasswordOld() {
     wd.get(app.getProperty("web.baseUrl") + "/manage_user_page.php");
     //click(By.cssSelector("button[id='menu-toggler']"));
     //click(By.cssSelector("a[href='/mantisbt/manage_overview_page.php']"));
@@ -42,7 +42,16 @@ public class RegistrationHelper extends HelperBase {
     String name = wd.findElement(By.cssSelector("input[id='edit-username']")).getAttribute("value");
     String email = wd.findElement(By.cssSelector("input[id='email-field']")).getAttribute("value");
     click(By.cssSelector("input[value='Сбросить пароль']"));
-    return new User(name, email);
+    return new UserData().withName(name).withEmail(email);
 
+  }
+
+  public void selectUser(UserData currentUser) {
+    wd.get(app.getProperty("web.baseUrl") + "/manage_user_page.php");
+    click(By.cssSelector("a[href='manage_user_edit_page.php?user_id=" + currentUser.getId() + "']"));
+  }
+
+  public void resetPassword() {
+    click(By.cssSelector("input[value='Сбросить пароль']"));
   }
 }
