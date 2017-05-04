@@ -1,20 +1,21 @@
 package ru.stqa.pft.mantis.tests;
 
-import org.testng.annotations.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import ru.lanwen.verbalregex.VerbalExpression;
 import ru.stqa.pft.mantis.model.MailMessage;
-import ru.stqa.pft.mantis.model.User;
+import ru.stqa.pft.mantis.model.UserData;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 import static org.testng.Assert.assertTrue;
 
-public class RegistrationTests extends TestBase{
+public class UserTests extends TestBase{
 
-  @BeforeMethod
+  @BeforeClass
   public void startMailServer() {
     app.mail().start();
   }
@@ -34,26 +35,37 @@ public class RegistrationTests extends TestBase{
 
   @Test
   public void testChangePassword() throws IOException, MessagingException {
+    app.registration().loginAdmin();
+    UserData currentUser = app.db().currentUser();
+    app.registration().selectUser(currentUser);
+    app.registration().resetPassword();
+    List<MailMessage> mailMessages = app.mail().waitForMail(1, 10000);
+    String confirmationLink = findConfirmationLink(mailMessages, currentUser.getEmail());
+    String password = "password";
+    app.registration().finish(confirmationLink, password);
+    assertTrue(app.newSession().login(currentUser.getName(), password));
+  }
 
+  @Test(enabled = false)
+  public void testChangePasswordOld() throws IOException, MessagingException {
     // for success test need create user with name contains "user"
     app.registration().loginAdmin();
-    User randomUser = app.registration().resetPassword();
+    UserData randomUser = app.registration().resetPasswordOld();
     List<MailMessage> mailMessages = app.mail().waitForMail(1, 10000);
     String confirmationLink = findConfirmationLink(mailMessages, randomUser.getEmail());
     String password = "password";
     app.registration().finish(confirmationLink, password);
     assertTrue(app.newSession().login(randomUser.getName(), password));
-
   }
+
 
   private String findConfirmationLink(List<MailMessage> mailMessages, String email) {
     MailMessage mailMessage = mailMessages.stream().filter((m) -> m.to.equals(email)).findFirst().get();
     VerbalExpression regex = VerbalExpression.regex().find("http:/").nonSpace().oneOrMore().build();
     return regex.getText(mailMessage.text);
-
   }
 
-  @AfterMethod(alwaysRun = true)
+  @AfterClass(alwaysRun = true)
   public void stopMailServer() {
     app.mail().stop();
   }
